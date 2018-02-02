@@ -1,0 +1,15 @@
+venv
+*.pyc
+.env
+env/
+.idea/
+tmp/
+.cache
+**/settings_compiled.py
+*.retry
+/db.sqlite3
+/project/media/*
+/db.sqlite3-journal
+.vscode/
+/project/staticfiles/*
+/celerybeat.pid

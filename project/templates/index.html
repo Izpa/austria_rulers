@@ -1,0 +1,105 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Austria rulers</title>
+    <script type="text/javascript" src="{% static 'js/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/select2/select2.min.js' %}"></script>
+    <link href="{% static 'js/select2/select2.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <form>
+        <label for="ruler-select">Выберите правителя</label>
+        <select id="ruler-select" name="ruler" style="width: 50%"><option></option></select>
+    </form>
+    <div id="rulers-table"></div>
+    <script>
+        function create_a_tag(url, title){
+            var a_tag = document.createElement('a');
+            a_tag.appendChild(document.createTextNode(title));
+            a_tag.setAttribute('href', url);
+            return a_tag
+        }
+        function create_ruler_table_row(ruler){
+            var ruler_row = document.createElement('tr');
+            var ruler_column = document.createElement('td');
+            ruler_column.appendChild(create_a_tag(ruler['url'],ruler['name']));
+            var predecessor_column = document.createElement('td');
+            if (ruler['predecessor']!=null) {
+                predecessor_column.appendChild(create_a_tag(ruler['predecessor']['url'], ruler['predecessor']['name']));
+            }
+            var successor_column = document.createElement('td');
+            if (ruler['successor']!=null) {
+                successor_column.appendChild(create_a_tag(ruler['successor']['url'], ruler['successor']['name']));
+            }
+            ruler_row.appendChild(ruler_column);
+            ruler_row.appendChild(predecessor_column);
+            ruler_row.appendChild(successor_column);
+            return ruler_row
+        }
+        function create_rulers_table(rulers){
+            var table = document.createElement('table');
+            var tableBody = document.createElement('tbody');
+            var caption = document.createElement('caption');
+            caption.appendChild(document.createTextNode('Таблица наследников'));
+
+            var table_header = document.createElement('tr');
+            var ruler_column = document.createElement('th');
+            ruler_column.appendChild(document.createTextNode('Правитель'));
+            var predecessor_column = document.createElement('th');
+            predecessor_column.appendChild(document.createTextNode('Предшественник'));
+            var successor_column = document.createElement('th');
+            successor_column.appendChild(document.createTextNode('Преемник'));
+            table_header.appendChild(ruler_column);
+            table_header.appendChild(predecessor_column);
+            table_header.appendChild(successor_column);
+            tableBody.appendChild(table_header);
+            tableBody.appendChild(create_ruler_table_row(rulers));
+            for (var i in rulers['all_successors']){
+                tableBody.appendChild(create_ruler_table_row(rulers['all_successors'][i]))
+            }
+
+            table.appendChild(caption);
+            table.appendChild(tableBody);
+            return table
+        }
+
+        $(document).ready(function() {
+            $.ajax({
+                url: '/api/v0/rulers/items/',
+                success: function(result){
+                    result = $.map(result, function (obj) {
+                      obj.text = obj.name;
+                      delete obj['name'];
+                      delete obj['url'];
+                      return obj;
+                    });
+                    $('#ruler-select').select2({
+                        selectOnClose: true,
+                        placeholder: 'Начните вводить имя правителя здесь',
+                        allowClear: true,
+                        data: result
+                    });
+                }
+            });
+            $('#ruler-select').change(function () {
+                var ruler_id = $(this).val();
+                var url =  '/api/v0/rulers/items_with_all_successors/'.concat(ruler_id, '/');
+                $.ajax({
+                url: url,
+                success: function(result){
+                    var ruler_table_div = document.getElementById('rulers-table');;
+                    ruler_table_div.innerHTML = '';
+                    var ruler_table = create_rulers_table(result);
+                    ruler_table.className += 'table';
+                    ruler_table_div.appendChild(ruler_table);
+                }
+            });
+            });
+        });
+    </script>
+</body>
+</html>
