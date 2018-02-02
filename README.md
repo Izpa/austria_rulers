@@ -5,15 +5,16 @@
 ## Requirements
 Python 3.6
 
-Django
+Django 2.0.1
 
 ## Download
 
+https://github.com/Izpa/austria_rulers/archive/develop.zip
 
 or
 
 ```
-git clone git@github.com:Izpa/
+git@github.com:Izpa/austria_rulers.git
 ```
 
 ## Installation
@@ -57,4 +58,5 @@ Also you can use docker-compose
 ```
 docker-compose build
 docker-compose up -d
+docker-compose exec web python manage.py createsuperuser
 ```
