@@ -9,3 +9,5 @@ IMPERIAL_PATTERN = re.compile(IMPERIAL_REGEX)
 
 SUCCESSOR_REGEX = 'Преемник:'
 SUCCESSOR_PATTERN = re.compile(SUCCESSOR_REGEX)
+
+WIKIPEDIA_URL = 'https://ru.wikipedia.org'

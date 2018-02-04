@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup, NavigableString, Tag
 
 from project.apps.rulers.models import Ruler
-from project.settings.base.wikipedia_parser import SUCCESSOR_PATTERN, AUSTRIA_PATTERN, IMPERIAL_PATTERN, FIRST_URL
+from project.settings.base.wikipedia_parser import *
 import logging
 
 
@@ -29,7 +29,7 @@ def get_successor_url_from_infobox_child(infobox_child: Tag):
     a_tag = infobox_child.find('td').find('a')
     if a_tag:
         successor_url = a_tag.get('href')
-        successor_url = 'https://ru.wikipedia.org' + successor_url
+        successor_url = WIKIPEDIA_URL + successor_url
     return successor_url
 
 
