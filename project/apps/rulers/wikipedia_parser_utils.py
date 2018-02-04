@@ -13,7 +13,7 @@ def get_ruler_name_from_infobox(infobox: Tag):
     names_content = infobox.contents[0]
     names = names_content.text.split('\n')
     names = list(filter(''.__ne__, names))
-    return names[0]
+    return names[0].strip()
 
 
 def is_infobox_child_with_successor(infobox_child: Tag):
