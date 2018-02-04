@@ -1,6 +1,9 @@
 # Austria rulers
+You can see demo on
 
+https://austria-rulers.herokuapp.com/
 
+It may be slow because its hobby heroku dino.
 
 ## Requirements
 Python 3.6
