@@ -3,6 +3,10 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 
 from project.apps.rulers.models import Ruler
 from project.settings.base.wikipedia_parser import SUCCESSOR_PATTERN, AUSTRIA_PATTERN, IMPERIAL_PATTERN, FIRST_URL
+import logging
+
+
+logger = logging.getLogger('django')
 
 
 def get_ruler_name_from_infobox(infobox: Tag):
@@ -76,9 +80,9 @@ def update_all_rulers():
                                                                         'succession_order': succession_order,
                                                                         'predecessor': previous_ruler})
             if is_create:
-                print('Austria ruler {ruler} was created'.format(ruler=str(ruler)))
+                logger.info('Austria ruler {ruler} was created'.format(ruler=str(ruler)))
             else:
-                print('Austria ruler {ruler} was updated'.format(ruler=str(ruler)))
+                logger.info('Austria ruler {ruler} was updated'.format(ruler=str(ruler)))
             previous_ruler = ruler
             url = get_successor_url_from_infobox(infobox)
             succession_order += 1

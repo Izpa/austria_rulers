@@ -1,3 +1,5 @@
+import os
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -10,6 +12,10 @@ LOGGING = {
         'django.db.backends': {
             'level': 'DEBUG',
             'handlers': ['console'],
-        }
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
     },
 }
